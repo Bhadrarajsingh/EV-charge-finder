@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charge Finder India — Vehicle Compatible Charging Stations</title>
+    <meta name="description" content="Choose your electric car or bike, enter your location, and find nearby charging stations with compatible connectors and real station details.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="ambient-bg"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+
+    <!-- STEP 1: Vehicle selection -->
+    <main class="flow-shell" id="vehiclePage">
+        <section class="flow-card vehicle-card">
+            <div class="brand-row"><div class="logo-icon">⚡</div><span>EV Charge Finder</span><span class="logo-badge">India</span></div>
+            <div class="step-pill">STEP 1 OF 3</div>
+            <h1>Choose your vehicle</h1>
+            <p class="flow-subtitle">Select one vehicle so we can find chargers with the right connector.</p>
+
+            <div class="vehicle-type-grid" id="vehicleTypeGrid">
+                <button type="button" class="vehicle-type-card" data-type="car">
+                    <span class="vehicle-emoji">🚗</span><span class="vehicle-type-title">Car</span><span class="vehicle-type-copy">Electric cars & SUVs</span>
+                </button>
+                <button type="button" class="vehicle-type-card" data-type="bike">
+                    <span class="vehicle-emoji">🏍️</span><span class="vehicle-type-title">Bike</span><span class="vehicle-type-copy">Electric scooters & motorcycles</span>
+                </button>
+            </div>
+
+            <div class="vehicle-selects hidden" id="vehicleSelects">
+                <label class="field-label" for="companySelect">Company</label>
+                <select id="companySelect" class="flow-select"><option value="">Select company</option></select>
+                <label class="field-label" for="modelSelect">Model</label>
+                <select id="modelSelect" class="flow-select" disabled><option value="">Select model</option></select>
+
+                <div class="connector-preview hidden" id="connectorPreview">
+                    <div class="connector-icon">🔌</div>
+                    <div><span class="mini-label">Compatible connector from database</span><strong id="selectedConnector">—</strong></div>
+                </div>
+                <button type="button" class="primary-flow-btn" id="vehicleNext" disabled>Continue to location <span>→</span></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- STEP 2: Location -->
+    <main class="flow-shell hidden" id="locationPage">
+        <section class="flow-card location-card">
+            <button type="button" class="back-flow-btn" id="locationBack">← Change vehicle</button>
+            <div class="step-pill">STEP 2 OF 3</div>
+            <div class="location-hero-icon">📍</div>
+            <h1>Where are you?</h1>
+            <p class="flow-subtitle">Enter a city or area to find nearby charging stations for your selected vehicle.</p>
+            <div class="selected-vehicle-chip" id="selectedVehicleChip">🚗 Vehicle selected</div>
+            <div class="location-input-wrap">
+                <span>🔎</span><input type="text" id="flowLocationInput" placeholder="Search city, area, landmark..." autocomplete="off">
+            </div>
+
+            <div class="location-settings">
+                <div class="location-setting">
+                    <label class="field-label" for="radiusFilter">Search radius</label>
+                    <select class="flow-select compact" id="radiusFilter">
+                        <option value="5">5 km</option>
+                        <option value="10" selected>10 km</option>
+                        <option value="25">25 km</option>
+                        <option value="50">50 km</option>
+                        <option value="100">100 km</option>
+                    </select>
+                </div>
+                <div class="location-setting">
+                    <label class="field-label" for="connectorFilter">Vehicle connector</label>
+                    <select class="flow-select compact" id="connectorFilter" disabled>
+                        <option value="">Auto from selected vehicle</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="location-search-note">
+                <span>⚡</span>
+                <div><b id="locationConnectorHint">Connector will be matched automatically</b><small>Only one vehicle is searched at a time.</small></div>
+            </div>
+
+            <button type="button" class="primary-flow-btn" id="findChargersBtn">Find charging stations <span>→</span></button>
+            <button type="button" class="secondary-flow-btn" id="useMyLocationBtn">📍 Use my current location</button>
+            <p class="privacy-note">Your location is used only to search for nearby charging stations.</p>
+        </section>
+    </main>
+
+    <!-- STEP 3: Results -->
+    <main class="results-page hidden" id="resultsPage">
+        <div class="results-topbar">
+            <button type="button" class="back-flow-btn" id="resultsBack">← Back to location</button>
+            <div class="results-vehicle" id="resultsVehicle">Vehicle</div>
+            <button type="button" class="secondary-top-btn" id="resultsLocationBtn">📍 Change location</button>
+        </div>
+
+        <div class="app-container" id="appContainer">
+            <nav class="navbar" id="navbar">
+                <a class="logo" href="#"><div class="logo-icon">⚡</div><span class="logo-text">EV Charge Finder</span><span class="logo-badge">India</span></a>
+                <div class="nav-stats">
+                    <div class="nav-stat"><span class="nav-stat-value" id="navStationCount">—</span><span class="nav-stat-label">Stations</span></div>
+                    <div class="nav-stat"><span class="nav-stat-value" id="navConnectorCount">—</span><span class="nav-stat-label">Connectors</span></div>
+                    <div class="nav-stat"><span class="nav-stat-value" id="navNetworkCount">—</span><span class="nav-stat-label">Networks</span></div>
+                </div>
+            </nav>
+            <div class="main-content">
+                <aside class="sidebar" id="sidebar">
+                    <div class="search-section results-search-hidden" aria-hidden="true">
+                        <input type="hidden" id="searchInput">
+                    </div>
+                    <div class="results-header"><span class="results-count" id="resultsCount">Searching...</span><button class="sort-btn" id="sortBtn">⇅ Distance</button></div>
+                    <div class="station-list" id="stationList"><div class="empty-state" id="emptyState"><div class="empty-icon">🔌</div><h3>Finding Stations</h3><p>Searching for compatible EV charging stations...</p></div></div>
+                    <div class="detail-panel" id="detailPanel"><div class="detail-header"><button class="detail-back" id="detailBack">← Back</button><h2 id="detailTitle">Station Details</h2><button class="detail-close" id="detailClose">✕</button></div><div class="detail-body" id="detailBody"></div></div>
+                </aside>
+                <div class="map-area"><div id="map"></div><div class="map-overlay-panel"><div class="map-chip"><span class="dot green"></span><span id="mapChipText">Locating...</span></div></div><div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div><div class="loading-text">Finding nearby charging stations...</div></div></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYNP1xjWGCHAePYi-M4gIeSHsNX3aA54w&callback=initMap&v=weekly&loading=async" defer></script>
+</body>
+</html>
